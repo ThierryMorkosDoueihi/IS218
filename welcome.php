@@ -66,7 +66,7 @@
       		if ($result->num_rows > 0) {
 		    while($row = $result->fetch_assoc()) {
 			if (password_verify($password, $row["password"])){
-				header("Location: newQuestion.php");
+				header("Location: question.php?userID=$username");
 				die();
 			}
 			else{

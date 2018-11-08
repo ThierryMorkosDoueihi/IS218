@@ -42,6 +42,7 @@
             <div class="col-xs-6 col-sm-6 col-md-6">
               <input type="submit" name="Submit" value="Submit" class="btn btn-lg btn-success btn-block">
             </div>
+	<div class="col-xs-6 col-sm-6 col-md-6"> <a href="question.php?userID=<?php echo $_GET['userID'] ?>" class="btn btn-lg btn-primary btn-block">Go To Questions</a> </div>
         </fieldset>
       </form>
     </div>
@@ -53,22 +54,34 @@
 
 
 <?php
+      include("connect.php");
       include("validate.php");
 	session_start();
-   
+      $user = $_GET['userID'];
       if($_SERVER["REQUEST_METHOD"] == "POST") {
 	$name = $_POST['questionname'];
 	$body = $_POST['content'];
 	$skills = $_POST['skills'];
 	if (strlen($skills) > 0) 
-		$skills = explode(",", $skills);
-        $input = validateQuestion($name, $body, $skills);
+		$skills1 = explode(",", $skills);
+        $input = validateQuestion($name, $body, $skills1);
       if($input == "correct"){
-		echo $name;
-		echo "<br>";
-		echo $body;
-		echo "<br>";
-		print_r ($skills);
+		$query="SELECT * FROM is_questions WHERE username LIKE '$user'";
+		$result = $conn->query($query);
+		$num = mysqli_num_rows($result) + 1;
+		$query="SELECT * FROM is_questions WHERE username LIKE '$user' AND num='$num'";
+		$result = $conn->query($query);
+		if(mysqli_num_rows($result) > 0)
+			$num = $num - 1;
+		$sql = "INSERT INTO is_questions (num, username, questionName, questionBody, questionSkills) VALUES('$num','$user', '$name', '$body', '$skills')";
+		$result = $conn->query($sql);
+      		if ($result) {
+		    header("Location: question.php?userID=$user&num=$num");
+		    die();
+		}
+		else{
+		    echo "OOPS! This is embarassing! We could not process your question. Please try again.";
+		}
    	}
 	else{
 		echo $input;

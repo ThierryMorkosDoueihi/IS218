@@ -45,7 +45,7 @@
           </div>
           <hr class="colorgraph">
           <div class="row">
-            <div class="col-xs-6 col-sm-6 col-md-6">
+            <div class="col-xs-12 col-sm-12 col-md-12">
               <input type="submit" name="Submit" value="Submit" class="btn btn-lg btn-success btn-block">
             </div>
         </fieldset>
@@ -76,10 +76,10 @@
 		];
 		$hash = password_hash($password, PASSWORD_BCRYPT, $options);
 
-		$sql = "INSERT INTO is_users (username, password) VALUES ('$username', '$hash')";
+		$sql = "INSERT INTO is_users (username, password, firstName, lastName, birthDay) VALUES ('$username', '$hash', '$fname', '$lname', '$date')";
 		$result = $conn->query($sql);
       		if ($result) {
-		    header("Location: newQuestion.php");
+		    header("Location: question.php?userID=$username");
 		    die();
 		}
 		else{

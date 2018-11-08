@@ -62,4 +62,34 @@
 		}
 	    }
 	}
+
+	function validateNewQuestion($name, $body, $skills) {
+	    if(!empty($name) && !empty($body) && !empty($skills)){
+	    	$input = validateQuestion($name, $body, $skills);
+		if($input == 'correct')
+			return 'all';
+		return $input;
+	    }
+	    else{
+		if(empty($name) && empty($body) && count($skills) >= 2){
+			return "skills";
+		}
+		else if(empty($body) && empty($skills) && strlen($name) >= 3){
+			return "name";
+		}
+		else if(empty($name) && empty($skills) && strlen($body) < 500){
+			return "body";
+		}
+		else if(empty($name) && strlen($body) < 500 && count($skills) >= 2){
+			return "body and skills";
+		}
+		else if(empty($body) && strlen($name) >= 3 && count($skills) >= 2){
+			return "name and skills";
+		}
+		else{
+			if(strlen($name) >= 3 && strlen($body) < 500)
+			return "name and body";
+		}
+	    }
+	}
 ?>
