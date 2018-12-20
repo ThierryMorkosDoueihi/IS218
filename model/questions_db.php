@@ -1,71 +1,103 @@
 <?php
+class QuestionsDB {
+    public static function get_all_questions() {
+        $db = Database::getDB();
+        $query = 'SELECT * FROM is_questions';
+    	$statement = $db->prepare($query);
+    	$statement->execute();
+    	$rows = $statement->fetchAll();
+    	$statement->closeCursor();
 
-function get_questions($user_ID) {
-    global $db;
-    $query = 'SELECT * FROM is_questions
+	foreach ($rows as $row) {
+	    $question = new Question(
+                        $row['username'],
+                        $row['questionName'],
+			$row['questionBody'],
+			$row['questionSkills']);
+            $question->setId($row['num']);
+            $questions[] = $question;
+	}
+    	return $questions;
+    }
+    public static function get_questions($user_ID) {
+        $db = Database::getDB();
+        $query = 'SELECT * FROM is_questions
               WHERE username = :user_ID';
-    $statement = $db->prepare($query);
-    $statement->bindValue(":user_ID", $user_ID);
-    $statement->execute();
-    $question = $statement->fetchAll();
-    $statement->closeCursor();
-    return $question;
-}
+    	$statement = $db->prepare($query);
+    	$statement->bindValue(":user_ID", $user_ID);
+    	$statement->execute();
+    	$rows = $statement->fetchAll();
+    	$statement->closeCursor();
 
-function get_question($num) {
-    global $db;
-    $query = 'SELECT * FROM is_questions
+	foreach ($rows as $row) {
+	    $question = new Question(
+                        $row['username'],
+                        $row['questionName'],
+			$row['questionBody'],
+			$row['questionSkills']);
+	    $question->setId($row['num']);
+            $questions[] = $question;
+	}
+    	return $questions;
+    }
+    public static function get_question($num) {
+        $db = Database::getDB();
+        $query = 'SELECT * FROM is_questions
               WHERE num = :num';
-    $statement = $db->prepare($query);
-    $statement->bindValue(":num", $num);
-    $statement->execute();
-    $question = $statement->fetch();
-    $statement->closeCursor();
-    return $question;
-}
-
-function delete_question($question_ID) {
-    global $db;
-    $query = 'DELETE FROM is_questions
+        $statement = $db->prepare($query);
+    	$statement->bindValue(":num", $num);
+    	$statement->execute();
+    	$rows = $statement->fetchAll();
+    	$statement->closeCursor();
+	foreach ($rows as $row) {
+	    $question = new Question(
+                        $row['username'],
+                        $row['questionName'],
+			$row['questionBody'],
+			$row['questionSkills']);
+            $question->setId($row['num']);
+            $questions[] = $question;
+	}
+    	return $questions;
+    }
+    public static function delete_question($question_ID) {
+        $db = Database::getDB();
+        $query = 'DELETE FROM is_questions
               WHERE num = :num';
-    $statement = $db->prepare($query);
-    $statement->bindValue(':num', $question_ID);
-    $statement->execute();
-    $statement->closeCursor();
-}
-
-function add_question($user, $name, $body, $skills) {
-    global $db;
-    $query = 'INSERT INTO is_questions
+    	$statement = $db->prepare($query);
+    	$statement->bindValue(':num', $question_ID);
+    	$statement->execute();
+    	$statement->closeCursor();
+    }
+    public static function add_question($user, $name, $body, $skills) {
+        $db = Database::getDB();
+        $query = 'INSERT INTO is_questions
                  (username, questionName, questionBody, questionSkills)
               VALUES
                  (:user, :name, :body, :skills)';
-    $statement = $db->prepare($query);
-    $statement->bindValue(':user', $user);
-    $statement->bindValue(':name', $name);
-    $statement->bindValue(':body', $body);
-    $statement->bindValue(':skills', $skills);
-    $statement->execute();
-    $statement->closeCursor();
-}
-
-function edit_question($question_ID, $user, $name, $body, $skills) {
-    global $db;
-    $query = "UPDATE is_questions
+    	$statement = $db->prepare($query);
+    	$statement->bindValue(':user', $user);
+    	$statement->bindValue(':name', $name);
+    	$statement->bindValue(':body', $body);
+    	$statement->bindValue(':skills', $skills);
+    	$statement->execute();
+    	$statement->closeCursor();
+    }
+    public static function edit_question($question_ID, $user, $name, $body, $skills) {
+        $db = Database::getDB();
+        $query = "UPDATE is_questions
               SET questionName = :name, questionBody = :body, questionSkills = :skills
               WHERE num = :num and username = :user";
-    $statement = $db->prepare($query);
-    $statement->bindValue(':num', $question_ID);
-    $statement->bindValue(':name', $name);
-    $statement->bindValue(':body', $body);
-    $statement->bindValue(':skills', $skills);
-    $statement->bindValue(':user', $user);
-    $statement->execute();
-    $statement->closeCursor();
-}
-
-
-function validateQuestion($name, $body, $skills) {
+    	$statement = $db->prepare($query);
+    	$statement->bindValue(':num', $question_ID);
+    	$statement->bindValue(':name', $name);
+    	$statement->bindValue(':body', $body);
+    	$statement->bindValue(':skills', $skills);
+    	$statement->bindValue(':user', $user);
+    	$statement->execute();
+    	$statement->closeCursor();
+    }
+    public static function validateQuestion($name, $body, $skills) {
 	    if(!empty($name) && !empty($body) && !empty($skills)){
 	    	if(strlen($name) >= 3 && strlen($body) < 500 && count($skills) >= 2)
 			return "correct";
@@ -87,9 +119,8 @@ function validateQuestion($name, $body, $skills) {
 			return "Enter Skills";
 		}
 	    }
-}
-
-function validateNewQuestion($name, $body, $skills) {
+    }
+    public static function validateNewQuestion($name, $body, $skills) {
 	    if(!empty($name) && !empty($body) && !empty($skills)){
 	    	$input = validateQuestion($name, $body, $skills);
 		if($input == 'correct')
@@ -117,5 +148,6 @@ function validateNewQuestion($name, $body, $skills) {
 			return "name and body";
 		}
 	    }
+    } 
 }
 ?>

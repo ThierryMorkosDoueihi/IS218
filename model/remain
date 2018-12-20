@@ -1,0 +1,6 @@
+ else if ($action == 'delete_question') {
+    $user = filter_input(INPUT_POST, 'username');
+    $qID = filter_input(INPUT_POST, 'question_id');
+    delete_question($qID);
+    header("Location: .?action=display_questions&userID=$user");
+}

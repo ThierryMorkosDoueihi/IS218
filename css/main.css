@@ -58,7 +58,12 @@ body{background-color:#f9f9f9;}
     100% { top: 3em; opacity: 1; }
 }
 
+.logoutLblPos{
 
+   position:fixed;
+   right:10px;
+   top:15px;
+}
 
 
 

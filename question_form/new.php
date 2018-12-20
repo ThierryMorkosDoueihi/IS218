@@ -25,7 +25,7 @@
             <div class="col-xs-6 col-sm-6 col-md-6">
               <input type="submit" name="Submit" value="Submit" class="btn btn-lg btn-success btn-block">
             </div>
-	<div class="col-xs-6 col-sm-6 col-md-6"> <a href="?action=display_questions&userID=<?php echo $user; ?>" class="btn btn-lg btn-primary btn-block">Go To Questions</a> </div>
+	<div class="col-xs-6 col-sm-6 col-md-6"> <a href="?action=display_questions" class="btn btn-lg btn-primary btn-block">Go To Questions</a> </div>
         </fieldset>
       </form>
     </div>
